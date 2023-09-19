@@ -5,18 +5,12 @@ import org.springframework.stereotype.Service;
 import se.joedst.day1.models.Forecast;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.io.StringWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-
+import java.util.*;
 
 
 @Service
@@ -30,6 +24,9 @@ public class ForecastService {
             throw new RuntimeException(e);
         }
     }
+
+
+
     private List<Forecast> readFromFile() throws IOException {
         if(!Files.exists(Path.of("predictions.json"))) return new ArrayList<Forecast>();
         ObjectMapper objectMapper = getObjectMapper();
@@ -69,16 +66,28 @@ public class ForecastService {
     public List<Forecast> getForecasts(){
         return forecasts;
     }
-    public void add(Forecast forecast) throws IOException {
+    public Forecast add(Forecast forecast) throws IOException {
         forecasts.add(forecast);
         writeAllToFile(forecasts);
+        return forecast;
     }
 
     public Forecast getByIndex(int i) {
         return forecasts.get(i);
     }
 
-    public void update(Forecast forecast) throws IOException {
+    public void update(Forecast forecastFromUser) throws IOException {
+        //
+        var foreCastInList = get(forecastFromUser.getId()).get();
+        foreCastInList.setTemperature(forecastFromUser.getTemperature());
+        foreCastInList.setDate(forecastFromUser.getDate());
+        foreCastInList.setHour(forecastFromUser.getHour());
         writeAllToFile(forecasts);
     }
+
+    public Optional<Forecast> get(UUID id) {
+        return getForecasts().stream().filter(forecast -> forecast.getId().equals(id))
+                .findFirst();
+    }
+
 }

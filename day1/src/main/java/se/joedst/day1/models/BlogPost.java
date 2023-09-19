@@ -1,6 +1,6 @@
 package se.joedst.day1.models;
 
-public class BlogPost {
+public class BlogPost { //MODELS IS DATABASE
     private int userId;
     private int id;
     private String title;

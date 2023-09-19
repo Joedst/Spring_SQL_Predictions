@@ -9,6 +9,11 @@ public class Forecast {
     private int date; //20230821
     private int hour;
 
+    //private String lastModifiedBy;
+
+    //private boolean deleted; exempel på soft delete eller active, då när man updaterar om man vill ta bort den, så kan man bara ha en funktion som "avaktiverar" den
+
+
     private float temperature;
 
     public UUID getId() {
